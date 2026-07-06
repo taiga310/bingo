@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}ビンゴアプリ - スタート{% endblock %}
+
+{% block content %}
+<style>
+  #landing {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 24px;
+    text-align: center;
+  }
+
+  #landing h1 {
+    margin-bottom: 24px;
+    font-size: 2.5rem;
+  }
+
+  #landing p {
+    color: var(--text-muted);
+    margin-bottom: 24px;
+    font-size: 1.1rem;
+  }
+
+  #start-button {
+    padding: 16px 48px;
+    font-size: 1.25rem;
+    border-radius: 12px;
+    min-width: 240px;
+  }
+
+  .subtitle {
+    color: var(--text-muted);
+    margin-top: 24px;
+    font-size: 0.9rem;
+  }
+
+  #landing-mascot {
+    animation: fairyBounce 1.2s ease-in-out infinite;
+  }
+
+  @keyframes fairyBounce {
+    0%, 100% {
+      transform: translateY(0) scale(1);
+    }
+    50% {
+      transform: translateY(-20px) scale(1.08);
+    }
+  }
+
+  #landing-mascot svg {
+    filter: drop-shadow(0 6px 16px rgba(59, 130, 246, 0.5));
+  }
+
+  @media (max-width: 768px) {
+    #landing h1 {
+      font-size: 1.8rem;
+    }
+
+    #start-button {
+      min-width: 200px;
+      font-size: 1rem;
+      padding: 12px 32px;
+    }
+
+    #landing-mascot svg {
+      width: 100px;
+      height: 100px;
+    }
+  }
+</style>
+
+<div id="landing">
+  <!-- Mascot with speech bubble -->
+  <div style="position: relative; display: inline-block;">
+    <!-- Speech bubble -->
+    <div id="landing-bubble" style="
+      background: linear-gradient(135deg, #2563eb, #60a5fa);
+      border: 3px solid #60a5fa;
+      border-radius: 20px;
+      padding: 20px 28px;
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 700;
+      max-width: 280px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
+      margin-bottom: 16px;
+      line-height: 1.6;
+      letter-spacing: 0.5px;
+    ">
+      ようこそ！E&R ビンゴへ🎉<br>楽しい時間をお過ごしください✨
+    </div>
+
+    <!-- Mascot -->
+    <div id="landing-mascot">
+      <svg viewBox="0 0 100 100" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="fairy-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <!-- Wings -->
+      <ellipse cx="30" cy="35" rx="15" ry="25" fill="url(#fairy-grad)" opacity="0.7"/>
+      <ellipse cx="70" cy="35" rx="15" ry="25" fill="url(#fairy-grad)" opacity="0.7"/>
+      <!-- Body -->
+      <circle cx="50" cy="60" r="18" fill="url(#fairy-grad)"/>
+      <!-- Head -->
+      <circle cx="50" cy="35" r="16" fill="url(#fairy-grad)"/>
+      <!-- Eyes -->
+      <circle cx="44" cy="32" r="3" fill="#0f172a"/>
+      <circle cx="56" cy="32" r="3" fill="#0f172a"/>
+      <!-- Smile -->
+      <path d="M 44 38 Q 50 41 56 38" stroke="#0f172a" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- Wand -->
+      <line x1="65" y1="45" x2="75" y2="25" stroke="#60a5fa" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="75" cy="25" r="5" fill="#60a5fa"/>
+      <!-- Name label -->
+      <text x="50" y="65" text-anchor="middle" font-size="12" font-weight="900" fill="#0f172a" dy=".3em">森本</text>
+    </svg>
+    </div>
+  </div>
+
+  <h1 style="margin-top: 32px; margin-bottom: 24px;">🎯 E&R ビンゴ</h1>
+
+  <button id="start-button">📱 カードを受け取る</button>
+</div>
+
+<script>
+  document.getElementById('start-button').addEventListener('click', function() {
+    // Always generate fresh seed (new card each time)
+    const seed = crypto.randomUUID();
+    localStorage.setItem('my_seed', seed);
+    window.location.href = `/card?seed=${seed}`;
+  });
+</script>
+{% endblock %}

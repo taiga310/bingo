@@ -1,0 +1,6 @@
+# Bingo App Requirements
+# Most packages are already in the shared venv, listed here for reference
+
+flask>=3.1.0
+openpyxl>=3.1.5
+qrcode>=7.4

@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}管理者パネル{% endblock %}
+
+{% block content %}
+<div style="padding: 24px; max-width: 1000px; margin: 0 auto;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+    <h1>🔐 E&R ビンゴ 管理パネル</h1>
+    <a href="/admin/logout" style="padding: 8px 16px; background: #ef4444; color: white; border-radius: 8px; text-decoration: none; font-weight: 600;">ログアウト</a>
+  </div>
+
+  <!-- QR Code Section -->
+  <div style="background: var(--bg-surface); padding: 24px; border-radius: 12px; border: 2px solid var(--primary-blue); margin-bottom: 32px;">
+    <h2 style="margin-bottom: 16px;">📱 QR コード</h2>
+    <p style="color: var(--text-muted); margin-bottom: 16px;">参加者にこの QR コードをスキャンさせてください</p>
+    <div style="text-align: center;">
+      <img id="qr-code" src="/api/qr-code" alt="QR Code" style="max-width: 300px; border: 2px solid var(--primary-blue); border-radius: 8px; padding: 8px; background: white;">
+    </div>
+    <p style="color: var(--text-muted); margin-top: 16px; font-size: 0.9rem;">
+      URL: <span id="share-url" style="font-family: monospace; color: var(--accent-blue);">取得中...</span>
+    </p>
+  </div>
+
+  <!-- Game Control Section -->
+  <div style="background: var(--bg-surface); padding: 24px; border-radius: 12px; border: 2px solid var(--accent-blue); margin-bottom: 32px;">
+    <h2 style="margin-bottom: 24px;">🎮 ゲームコントロール</h2>
+
+    <div style="margin-bottom: 24px;">
+      <h3 style="margin-bottom: 12px;">名前リスト（{{ names|length }}件）</h3>
+      <p style="color: var(--text-muted); margin-bottom: 12px;">Excel ファイルをアップロードして名前を更新</p>
+      <form id="upload-form" enctype="multipart/form-data" style="display: flex; gap: 12px;">
+        <input type="file" id="excel-file" name="file" accept=".xlsx,.xls" required style="flex: 1;">
+        <button type="submit">アップロード</button>
+      </form>
+      <div id="upload-status" style="margin-top: 12px;"></div>
+    </div>
+
+    <hr style="border: none; border-top: 1px solid rgba(96, 165, 250, 0.3); margin: 24px 0;">
+
+    <div>
+      <h3 style="margin-bottom: 12px;">名前の抽選</h3>
+      <button id="draw-button" style="padding: 16px 32px; font-size: 1.1rem; margin-bottom: 16px;">🎰 次の名前を引く！</button>
+
+      <div style="background: var(--bg-dark); padding: 16px; border-radius: 8px;">
+        <p style="color: var(--text-muted); margin-bottom: 8px;">引いた名前</p>
+        <div id="drawn-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px;">
+          {% for name in drawn %}
+          <div style="background: var(--primary-blue); padding: 12px; border-radius: 8px; text-align: center; font-weight: 600;">{{ name }}</div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <button id="reset-button" style="margin-top: 16px; background: #ef4444;">🔄 リセット</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Get share URL
+  fetch('/api/state').then(r => r.json()).then(state => {
+    const url = window.location.origin;
+    document.getElementById('share-url').textContent = url;
+  });
+
+  // Upload form
+  document.getElementById('upload-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = new FormData();
+    form.append('file', document.getElementById('excel-file').files[0]);
+
+    try {
+      const res = await fetch('/admin/upload', {method: 'POST', body: form});
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById('upload-status').innerHTML = `✅ ${data.count}件のアップロード完了`;
+        location.reload();
+      } else {
+        document.getElementById('upload-status').innerHTML = `❌ ${data.error}`;
+      }
+    } catch (e) {
+      document.getElementById('upload-status').innerHTML = `❌ エラー: ${e.message}`;
+    }
+  });
+
+  // Draw button
+  document.getElementById('draw-button').addEventListener('click', async () => {
+    const res = await fetch('/admin/draw', {method: 'POST'});
+    const data = await res.json();
+    if (data.name) {
+      location.reload();
+    } else {
+      alert('エラー: ' + data.error);
+    }
+  });
+
+  // Reset button
+  document.getElementById('reset-button').addEventListener('click', async () => {
+    if (confirm('本当にリセットしますか？')) {
+      await fetch('/admin/reset', {method: 'POST'});
+      location.reload();
+    }
+  });
+</script>
+{% endblock %}

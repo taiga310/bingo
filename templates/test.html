@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}デバッグテスト{% endblock %}
+
+{% block content %}
+<div style="padding: 20px; color: white;">
+  <h1>Bingo Card Debug Test</h1>
+
+  <h2>Test 1: Marked Array Check</h2>
+  <p>Expected initial state: [false, false, false, false, true, false, false, false, false]</p>
+  <button onclick="testInitialState()">Run Test</button>
+  <div id="test1-result"></div>
+
+  <h2>Test 2: Bingo Detection</h2>
+  <p>Test if center-only (marked[4]=true) triggers bingo</p>
+  <button onclick="testCenterOnly()">Run Test</button>
+  <div id="test2-result"></div>
+
+  <h2>Test 3: Check Winning Lines</h2>
+  <button onclick="testWinningLines()">Show Winning Lines</button>
+  <div id="test3-result"></div>
+
+  <h2>Test 4: Fresh localStorage</h2>
+  <button onclick="testFreshStorage()">Check Fresh Storage</button>
+  <div id="test4-result"></div>
+</div>
+
+<script>
+const WINNING_LINES = [
+  [0, 1, 2], [3, 4, 5], [6, 7, 8],
+  [0, 3, 6], [1, 4, 7], [2, 5, 8],
+  [0, 4, 8], [2, 4, 6]
+];
+
+function checkBingo(marked) {
+  const bingoLines = [];
+  for (const line of WINNING_LINES) {
+    const count = line.filter(i => marked[i]).length;
+    if (count === 3) {
+      bingoLines.push(line);
+    }
+  }
+  return bingoLines.length > 0;
+}
+
+function testInitialState() {
+  const marked = new Array(9).fill(false);
+  marked[4] = true;
+  const result = document.getElementById('test1-result');
+  result.innerHTML = `<pre>marked = ${JSON.stringify(marked)}
+Bingo? ${checkBingo(marked)}</pre>`;
+}
+
+function testCenterOnly() {
+  const marked = new Array(9).fill(false);
+  marked[4] = true;
+  const isBingo = checkBingo(marked);
+  const result = document.getElementById('test2-result');
+  result.innerHTML = `<pre>Center only (index 4 = true)
+Result: ${isBingo ? '❌ BINGO (BUG!)' : '✓ No bingo (correct)'}</pre>`;
+}
+
+function testWinningLines() {
+  const result = document.getElementById('test3-result');
+  let html = '<pre>';
+  WINNING_LINES.forEach((line, i) => {
+    html += `Line ${i}: [${line}]\n`;
+  });
+
+  // Check which lines include index 4
+  const linesWithCenter = WINNING_LINES.filter(line => line.includes(4));
+  html += `\nLines containing center (index 4): ${linesWithCenter.length}\n`;
+  linesWithCenter.forEach(line => {
+    html += `  [${line}]\n`;
+  });
+
+  html += '</pre>';
+  result.innerHTML = html;
+}
+
+function testFreshStorage() {
+  const seed = 'debug-' + Date.now();
+  const storageKey = `bingo_state_${seed}`;
+
+  // Clear if exists
+  localStorage.removeItem(storageKey);
+
+  // Check fresh
+  const saved = localStorage.getItem(storageKey);
+  const result = document.getElementById('test4-result');
+  result.innerHTML = `<pre>Seed: ${seed}
+Storage key: ${storageKey}
+Saved value: ${saved}
+✓ Fresh state confirmed</pre>`;
+}
+</script>
+{% endblock %}

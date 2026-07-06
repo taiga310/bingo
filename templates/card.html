@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}ビンゴカード{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/card.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/mascot.css') }}">
+{% endblock %}
+
+{% block content %}
+<div id="card-container">
+  <div id="card-header">
+    <h1>🎯 E&R ビンゴ</h1>
+    <p>セルをタップしてマークしよう！</p>
+  </div>
+
+  <div id="bingo-grid">
+    {% for cell in cells %}
+    <div class="bingo-cell"
+         data-index="{{ cell.index }}"
+         data-row="{{ cell.row }}"
+         data-col="{{ cell.col }}"
+         data-center="{{ 'true' if cell.is_center else 'false' }}">
+      {{ cell.name }}
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Reach Banner -->
+  <div id="reach-banner" hidden>
+    <div>🚀 REACH! あと1つ！</div>
+  </div>
+
+  <!-- Bingo Overlay -->
+  <div id="bingo-overlay" hidden style="display: none !important;">
+    <h2>🎉 BINGO! 🎉</h2>
+    <p>おめでとう！ビンゴ達成です！</p>
+  </div>
+
+  <!-- Mascot -->
+  <div id="mascot">
+    <div id="mascot-bubble" style="display:none;">
+      <div class="mascot-text">message</div>
+    </div>
+    <svg viewBox="0 0 100 100" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
+      <!-- Fairy character -->
+      <defs>
+        <linearGradient id="fairy-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <!-- Wings -->
+      <ellipse cx="30" cy="35" rx="15" ry="25" fill="url(#fairy-grad)" opacity="0.7"/>
+      <ellipse cx="70" cy="35" rx="15" ry="25" fill="url(#fairy-grad)" opacity="0.7"/>
+      <!-- Body -->
+      <circle cx="50" cy="60" r="18" fill="url(#fairy-grad)"/>
+      <!-- Head -->
+      <circle cx="50" cy="35" r="16" fill="url(#fairy-grad)"/>
+      <!-- Eyes -->
+      <circle cx="44" cy="32" r="3" fill="#0f172a"/>
+      <circle cx="56" cy="32" r="3" fill="#0f172a"/>
+      <!-- Smile -->
+      <path d="M 44 38 Q 50 41 56 38" stroke="#0f172a" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- Wand -->
+      <line x1="65" y1="45" x2="75" y2="25" stroke="#60a5fa" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="75" cy="25" r="5" fill="#60a5fa"/>
+      <!-- Name label -->
+      <text x="50" y="65" text-anchor="middle" font-size="12" font-weight="900" fill="#0f172a" dy=".3em">森本</text>
+    </svg>
+  </div>
+</div>
+
+<!-- Canvas for confetti -->
+<canvas id="confetti-canvas"></canvas>
+
+<!-- External libraries -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.0/dist/confetti.browser.min.js"></script>
+
+<!-- App Scripts -->
+<script>
+  window.CARD_SEED = "{{ seed }}";
+  window.CONFIG = {
+    centerName: "{{ config.center }}",
+    centerMessage: "{{ config.center_message }}"
+  };
+</script>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/mascot.js') }}"></script>
+<script src="{{ url_for('static', filename='js/card.js') }}"></script>
+{% endblock %}

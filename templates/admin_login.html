@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}管理者ログイン{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: center; align-items: center; height: 100vh; padding: 24px;">
+  <div style="background: var(--bg-surface); padding: 40px; border-radius: 12px; max-width: 400px; width: 100%;">
+    <h1 style="text-align: center; margin-bottom: 32px;">🔐 管理者ログイン</h1>
+
+    {% if error %}
+    <div style="background: rgba(239, 68, 68, 0.1); border: 2px solid #ef4444; border-radius: 8px; padding: 12px; margin-bottom: 24px; color: #fca5a5;">
+      {{ error }}
+    </div>
+    {% endif %}
+
+    <form method="POST">
+      <div style="margin-bottom: 24px;">
+        <label style="display: block; margin-bottom: 8px; font-weight: 600;">パスワード</label>
+        <input type="password" name="password" required style="width: 100%; padding: 12px; border: 2px solid var(--primary-blue); background: var(--bg-dark); color: white; border-radius: 8px;">
+      </div>
+
+      <button type="submit" style="width: 100%;">ログイン</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

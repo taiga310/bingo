@@ -182,6 +182,13 @@ class MascotController {
     // Stop movement during message
     this.stopMovement();
 
+    // Move to bottom-right before showing message (for readability)
+    const pos = this.positions['bottom-right'];
+    Object.keys(pos).forEach(key => {
+      this.mascotEl.style[key] = pos[key];
+    });
+    this.currentPosition = 'bottom-right';
+
     // Update bubble text
     const textEl = this.bubbleEl.querySelector('.mascot-text');
     if (textEl) {

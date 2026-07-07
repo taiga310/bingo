@@ -117,6 +117,21 @@
     filter: drop-shadow(0 6px 16px rgba(59, 130, 246, 0.5));
   }
 
+  @keyframes runAway {
+    0% {
+      transform: scale(1) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(0.5) rotate(45deg) translateY(200px) translateX(150px);
+      opacity: 0;
+    }
+  }
+
+  .fairy-running-away {
+    animation: runAway 0.8s ease-in-out forwards !important;
+  }
+
   @media (max-width: 768px) {
     #landing h1 {
       font-size: 1.8rem;
@@ -207,7 +222,7 @@
     </div>
 
     <h1 style="margin-top: 32px; margin-bottom: 8px;">🎯 E&R ビンゴ</h1>
-    <p style="font-size: 0.95rem; color: #a0aec0; margin-bottom: 24px;">🧚 妖精森本幹事団一同</p>
+    <p style="font-size: 0.95rem; color: #a0aec0; margin-bottom: 24px;">森本配下の幹事団パシリ妖精たち</p>
 
     <button id="start-button">📱 カードを受け取る</button>
   </div>
@@ -273,7 +288,11 @@
 
       // JavaScript アニメーションを使用
       let startTime = null;
+      let isRunning = false;
+
       const animate = (timestamp) => {
+        if (isRunning) return; // 逃げ中は続行しない
+
         if (!startTime) startTime = timestamp;
         const progress = ((timestamp - startTime) % (duration * 1000)) / (duration * 1000);
         const angle = startAngle + progress * 360;
@@ -286,6 +305,15 @@
         fairy.style.opacity = 0.4 + 0.3 * Math.sin(progress * Math.PI);
 
         requestAnimationFrame(animate);
+      };
+
+      // パシリを逃すメソッド
+      fairy.makeRunAway = () => {
+        isRunning = true;
+        fairy.classList.add('fairy-running-away');
+        setTimeout(() => {
+          fairy.style.display = 'none';
+        }, 800);
       };
 
       setTimeout(() => {
@@ -311,6 +339,25 @@
   // Initialize
   createFlyingFairies();
   createStars();
+
+  // ランダムでパシリを逃す
+  function randomMakeFairiesRunAway() {
+    const fairies = Array.from(document.querySelectorAll('.flying-fairy'));
+
+    // 30%の確率で逃がす（1～3匹）
+    if (Math.random() < 0.3) {
+      const numToRun = Math.floor(Math.random() * 3) + 1; // 1～3匹
+      for (let i = 0; i < numToRun; i++) {
+        const randomFairy = fairies[Math.floor(Math.random() * fairies.length)];
+        if (randomFairy && randomFairy.makeRunAway) {
+          randomFairy.makeRunAway();
+        }
+      }
+    }
+  }
+
+  // 15～45秒ごとにランダムでパシリを逃す
+  setInterval(randomMakeFairiesRunAway, 15000 + Math.random() * 30000);
 
   // Button handler
   document.getElementById('start-button').addEventListener('click', function() {

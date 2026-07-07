@@ -356,13 +356,29 @@
 
   // 森本のコメント表示＆パシリ逃げ
   function showMorimotoCommentAndMakeFairiesRunAway() {
-    // 森本のコメント表示（小さく）
+    // 森本のコメント表示（妖精の位置に追従）
     const comment = morimotoComments[Math.floor(Math.random() * morimotoComments.length)];
+
+    // 中央の妖精（リーダー）の位置を取得
+    const landingMascot = document.getElementById('landing-mascot');
+    let posX = window.innerWidth / 2;
+    let posY = window.innerHeight / 2;
+
+    if (landingMascot) {
+      const rect = landingMascot.getBoundingClientRect();
+      // 妖精の上に表示
+      posX = rect.left + rect.width / 2;
+      posY = rect.top - 60; // 妖精の上60pxに表示
+
+      // 画面外に出ないように調整
+      if (posY < 50) posY = rect.bottom + 30;
+    }
+
     const commentEl = document.createElement('div');
     commentEl.style.cssText = `
       position: fixed;
-      top: 50%;
-      left: 50%;
+      top: ${posY}px;
+      left: ${posX}px;
       transform: translate(-50%, -50%);
       background: linear-gradient(135deg, #fbbf24, #f59e0b);
       color: #0f172a;
@@ -373,6 +389,7 @@
       z-index: 200;
       box-shadow: 0 4px 12px rgba(251, 191, 36, 0.5);
       animation: fadeInOut 2s ease-in-out;
+      white-space: nowrap;
     `;
     commentEl.textContent = comment;
     document.body.appendChild(commentEl);

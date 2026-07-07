@@ -340,24 +340,77 @@
   createFlyingFairies();
   createStars();
 
-  // ランダムでパシリを逃す
-  function randomMakeFairiesRunAway() {
-    const fairies = Array.from(document.querySelectorAll('.flying-fairy'));
+  // 森本のパワハラコメント
+  const morimotoComments = [
+    '働け！',
+    'なんで終わってないん？',
+    '寝ないでやればいいじゃん。',
+    'もっと働け！',
+    'お前たちのためにやってるんだ！',
+    'ラストスパートだ！',
+    'あれやってこい。',
+    'さっさと片付けろ！',
+    'いつまでやってんだ？',
+    'やるなら徹夜でやれ！'
+  ];
 
-    // 30%の確率で逃がす（1～3匹）
-    if (Math.random() < 0.3) {
-      const numToRun = Math.floor(Math.random() * 3) + 1; // 1～3匹
-      for (let i = 0; i < numToRun; i++) {
-        const randomFairy = fairies[Math.floor(Math.random() * fairies.length)];
-        if (randomFairy && randomFairy.makeRunAway) {
-          randomFairy.makeRunAway();
-        }
+  // 森本のコメント表示＆パシリ逃げ
+  function showMorimotoCommentAndMakeFairiesRunAway() {
+    // 森本のコメント表示（小さく）
+    const comment = morimotoComments[Math.floor(Math.random() * morimotoComments.length)];
+    const commentEl = document.createElement('div');
+    commentEl.style.cssText = `
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: #0f172a;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      z-index: 200;
+      box-shadow: 0 4px 12px rgba(251, 191, 36, 0.5);
+      animation: fadeInOut 2s ease-in-out;
+    `;
+    commentEl.textContent = comment;
+    document.body.appendChild(commentEl);
+
+    // 2秒後に削除
+    setTimeout(() => commentEl.remove(), 2000);
+
+    // パシリ妖精を逃す（1～3匹）
+    const fairies = Array.from(document.querySelectorAll('.flying-fairy'));
+    const numToRun = Math.floor(Math.random() * 3) + 1; // 1～3匹
+    const selected = new Set();
+
+    for (let i = 0; i < numToRun && selected.size < fairies.length; i++) {
+      let fairy;
+      do {
+        fairy = fairies[Math.floor(Math.random() * fairies.length)];
+      } while (selected.has(fairy));
+
+      selected.add(fairy);
+      if (fairy.makeRunAway) {
+        fairy.makeRunAway();
       }
     }
   }
 
-  // 15～45秒ごとにランダムでパシリを逃す
-  setInterval(randomMakeFairiesRunAway, 15000 + Math.random() * 30000);
+  // 3～8秒ごとに森本のコメント表示＆パシリ逃げ
+  setInterval(showMorimotoCommentAndMakeFairiesRunAway, 3000 + Math.random() * 5000);
+
+  // フェードイン・アウトアニメーション追加
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes fadeInOut {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+      50% { opacity: 1; }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+    }
+  `;
+  document.head.appendChild(style);
 
   // Button handler
   document.getElementById('start-button').addEventListener('click', function() {

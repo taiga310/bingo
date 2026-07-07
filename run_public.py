@@ -62,14 +62,9 @@ def start_flask():
     print_header("Flask サーバーを起動中...")
 
     try:
-        if IS_WINDOWS:
-            # Windows: CMD で venv + Flask
-            cmd = f"cd {os.getcwd()} && {PYTHON_EXE} app.py"
-            return subprocess.Popen(cmd, shell=True)
-        else:
-            # Mac/Linux: bash で venv + Flask
-            cmd = f"{PYTHON_EXE} app.py"
-            return subprocess.Popen(cmd, shell=False)
+        # 全環境で shell=True で実行
+        cmd = f"{PYTHON_EXE} app.py"
+        return subprocess.Popen(cmd, shell=True)
     except Exception as e:
         print_header("❌ Flask 起動エラー")
         print(f"Error: {e}\n")

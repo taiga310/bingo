@@ -25,9 +25,6 @@ class BingoCard {
     this.cells = cells;
     this.storageKey = `bingo_state_${seed}`;
 
-    // Save seed for recovery if cache is cleared
-    localStorage.setItem('bingo_permanent_seed', seed);
-
     // Load or init state
     const saved = this.loadState();
     if (saved) {

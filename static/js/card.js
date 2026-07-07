@@ -51,6 +51,7 @@ class BingoCard {
     this.renderCells();
     this.attachEventListeners();
     this.startPolling();
+    this.startRandomEncouragement();
 
     // Mascot greeting on first visit
     const seen = this.loadMascotSeen();
@@ -259,6 +260,29 @@ class BingoCard {
       clearInterval(this.pollingInterval);
       this.pollingInterval = null;
     }
+  }
+
+  startRandomEncouragement() {
+    const encouragements = [
+      'その調子だよ！',
+      '頑張ってるね！',
+      'いけいけ！',
+      'もう少しだ！',
+      'ナイス！',
+      'いい感じだね！',
+      '応援してるよ！',
+      'ファイト！',
+      'やればできる！',
+      '最高だ！'
+    ];
+
+    this.encouragementInterval = setInterval(() => {
+      // ゲーム中だけ表示（ビンゴ前）
+      if (!this.previousState.bingo) {
+        const randomMsg = encouragements[Math.floor(Math.random() * encouragements.length)];
+        window.mascot.show('random_encouragement', randomMsg);
+      }
+    }, 30000 + Math.random() * 30000); // 30～60秒のランダム間隔
   }
 
   async pollGameState() {

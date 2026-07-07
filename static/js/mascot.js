@@ -195,27 +195,30 @@ class MascotController {
       textEl.textContent = text;
     }
 
-    // Show
-    this.bubbleEl.style.display = 'block';
-    this.mascotEl.classList.add('mascot--visible');
-
-    // Determine display time based on trigger
-    const displayTime = triggerId === 'bingo' ? 8000 : 3500; // Bingo: 8s, others: 3.5s
-
-    // Hide after duration
+    // Wait for position transition to complete (0.6s) before showing
     setTimeout(() => {
-      this.busy = false;
-      this.mascotEl.classList.remove('mascot--visible');
-      this.bubbleEl.style.display = 'none';
+      // Show bubble and mascot
+      this.bubbleEl.style.display = 'block';
+      this.mascotEl.classList.add('mascot--visible');
 
-      // Resume movement
-      this.resumeMovement();
+      // Determine display time based on trigger
+      const displayTime = triggerId === 'bingo' ? 8000 : 3500; // Bingo: 8s, others: 3.5s
 
-      // Next message after gap
+      // Hide after duration
       setTimeout(() => {
-        this._flush();
-      }, 300);
-    }, displayTime);
+        this.busy = false;
+        this.mascotEl.classList.remove('mascot--visible');
+        this.bubbleEl.style.display = 'none';
+
+        // Resume movement
+        this.resumeMovement();
+
+        // Next message after gap
+        setTimeout(() => {
+          this._flush();
+        }, 300);
+      }, displayTime);
+    }, 600); // Wait for position transition
   }
 
   _hide() {

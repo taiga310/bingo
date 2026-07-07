@@ -42,35 +42,52 @@ cd bingo
 
 ## 💻 ステップ 2: セットアップスクリプトを実行
 
-### Mac / Linux ユーザー
+### 全環境共通（推奨）
 
-1. **ターミナルを開く**（Spotlight で「ターミナル」と検索）
-2. 以下をコピペして実行：
+**ターミナル / コマンドプロンプトを開いて：**
 
 ```bash
 cd bingo
-./setup.sh
+python setup.py
+```
+
+または
+
+```bash
+python3 setup.py
 ```
 
 **成功時の出力：**
 ```
 🎯 E&R Bingo Setup
 ==================
-✓ Python found: Python 3.9.0
+✓ Python 3.9.0
 ✓ Virtual environment ready
 ✓ Dependencies installed
-✓ ngrok found: ngrok version 3.39.0
+✓ ngrok version 3.39.0
 
-✅ セットアップ完了！
+✅ セットアップ完了
+
+次のステップ:
+  python run_public.py
 ```
 
-### Windows ユーザー
+---
 
-1. ngrok を先にインストール： https://ngrok.com/download
-2. Python をインストール： https://www.python.org/downloads/
-3. コマンドプロンプトで：
+### Mac / Linux（代替方法）
+
+Bash スクリプトを使う場合：
 
 ```bash
+cd bingo
+./setup.sh
+```
+
+### Windows（代替方法）
+
+PowerShell を管理者として実行：
+
+```powershell
 cd bingo
 python -m venv venv
 venv\Scripts\activate
@@ -81,10 +98,16 @@ pip install -r requirements.txt
 
 ## 🎮 ステップ 3: アプリを起動
 
-ターミナルで以下を実行：
+**ターミナル / コマンドプロンプトで以下を実行：**
 
 ```bash
-./run_public.sh
+python run_public.py
+```
+
+または
+
+```bash
+python3 run_public.py
 ```
 
 **実行後、以下のような画面が表示されます：**

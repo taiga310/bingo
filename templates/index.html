@@ -206,7 +206,8 @@
       </div>
     </div>
 
-    <h1 style="margin-top: 32px; margin-bottom: 24px;">🎯 E&R ビンゴ</h1>
+    <h1 style="margin-top: 32px; margin-bottom: 8px;">🎯 E&R ビンゴ</h1>
+    <p style="font-size: 0.95rem; color: #a0aec0; margin-bottom: 24px;">🧚 妖精森本幹事団一同</p>
 
     <button id="start-button">📱 カードを受け取る</button>
   </div>
@@ -235,9 +236,9 @@
       fairy.className = 'flying-fairy';
 
       const color = colors[i];
-      const angle = (i / 10) * 360; // 円形配置
       const duration = 8 + Math.random() * 2; // 8～10秒で中央を周回
       const delay = i * 0.2; // ずらして登場
+      const radius = 150; // 周回半径
 
       fairy.innerHTML = `
         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -254,33 +255,42 @@
         </svg>
       `;
 
-      fairy.style.animation = `orbit${i} ${duration}s linear infinite`;
-      fairy.style.animationDelay = `${delay}s`;
-
       container.appendChild(fairy);
 
-      // Create orbit keyframes for each fairy (circular motion around center)
+      // JavaScript で軌道アニメーションを設定
+      const startAngle = (i / 10) * 360;
       const keyframes = `
         @keyframes orbit${i} {
-          0% {
-            left: calc(50% + 150px * cos(${angle}deg));
-            top: calc(50% + 150px * sin(${angle}deg));
-            opacity: 0.4;
-          }
-          50% {
-            opacity: 0.7;
-          }
-          100% {
-            left: calc(50% + 150px * cos(${angle + 360}deg));
-            top: calc(50% + 150px * sin(${angle + 360}deg));
-            opacity: 0.4;
-          }
+          0% { --angle: ${startAngle}deg; opacity: 0.4; }
+          50% { opacity: 0.7; }
+          100% { --angle: ${startAngle + 360}deg; opacity: 0.4; }
         }
       `;
 
       const style = document.createElement('style');
       style.textContent = keyframes;
       document.head.appendChild(style);
+
+      // JavaScript アニメーションを使用
+      let startTime = null;
+      const animate = (timestamp) => {
+        if (!startTime) startTime = timestamp;
+        const progress = ((timestamp - startTime) % (duration * 1000)) / (duration * 1000);
+        const angle = startAngle + progress * 360;
+        const rad = (angle * Math.PI) / 180;
+        const x = Math.cos(rad) * radius;
+        const y = Math.sin(rad) * radius;
+
+        fairy.style.left = `calc(50% + ${x}px - 30px)`;
+        fairy.style.top = `calc(50% + ${y}px - 30px)`;
+        fairy.style.opacity = 0.4 + 0.3 * Math.sin(progress * Math.PI);
+
+        requestAnimationFrame(animate);
+      };
+
+      setTimeout(() => {
+        requestAnimationFrame(animate);
+      }, delay * 1000);
     }
   }
 

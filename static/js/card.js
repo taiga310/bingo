@@ -276,11 +276,25 @@ class BingoCard {
       '最高だ！'
     ];
 
+    // こき使い系メッセージ
+    const slaveryMessages = [
+      'slave_1',
+      'slave_2',
+      'slave_3',
+      'slave_4'
+    ];
+
     this.encouragementInterval = setInterval(() => {
       // ゲーム中だけ表示（ビンゴ前）
       if (!this.previousState.bingo) {
-        const randomMsg = encouragements[Math.floor(Math.random() * encouragements.length)];
-        window.mascot.show('random_encouragement', randomMsg);
+        // 20% の確率でこき使い系、80% で応援系
+        if (Math.random() < 0.2) {
+          const slaveTrigger = slaveryMessages[Math.floor(Math.random() * slaveryMessages.length)];
+          window.mascot.show(slaveTrigger);
+        } else {
+          const randomMsg = encouragements[Math.floor(Math.random() * encouragements.length)];
+          window.mascot.show('random_encouragement', randomMsg);
+        }
       }
     }, 30000 + Math.random() * 30000); // 30～60秒のランダム間隔
   }

@@ -92,7 +92,7 @@
   #landing-mascot {
     position: relative;
     z-index: 15;
-    animation: centerFairyBounce 1.2s ease-in-out infinite;
+    animation: centerFairyBounce 1.2s ease-in-out infinite, leaderGlow 3s ease-in-out infinite;
   }
 
   @keyframes centerFairyBounce {
@@ -100,7 +100,16 @@
       transform: translateY(0) scale(1);
     }
     50% {
-      transform: translateY(-20px) scale(1.08);
+      transform: translateY(-20px) scale(1.15);
+    }
+  }
+
+  @keyframes leaderGlow {
+    0%, 100% {
+      filter: drop-shadow(0 6px 16px rgba(59, 130, 246, 0.5));
+    }
+    50% {
+      filter: drop-shadow(0 10px 24px rgba(96, 165, 250, 0.8));
     }
   }
 
@@ -204,23 +213,31 @@
 </div>
 
 <script>
-  // Create flying fairies with different colors and animations
+  // Create flying fairies orbiting around center (following the leader)
   function createFlyingFairies() {
     const container = document.getElementById('flying-fairies');
     const colors = [
       { start: '#60a5fa', end: '#3b82f6' },      // 青
       { start: '#a78bfa', end: '#8b5cf6' },      // 紫
       { start: '#ec4899', end: '#db2777' },      // ピンク
-      { start: '#06b6d4', end: '#0891b2' }       // シアン
+      { start: '#06b6d4', end: '#0891b2' },      // シアン
+      { start: '#8b5cf6', end: '#7c3aed' },      // 濃紫
+      { start: '#f97316', end: '#ea580c' },      // オレンジ
+      { start: '#10b981', end: '#059669' },      // 緑
+      { start: '#f43f5e', end: '#e11d48' },      // 赤
+      { start: '#14b8a6', end: '#0d9488' },      // ティール
+      { start: '#6366f1', end: '#4f46e5' }       // インディゴ
     ];
 
-    for (let i = 0; i < 4; i++) {
+    // 10匹の妖精を中央を中心に円形で配置
+    for (let i = 0; i < 10; i++) {
       const fairy = document.createElement('div');
       fairy.className = 'flying-fairy';
 
       const color = colors[i];
-      const duration = 4 + i * 0.5; // 4～5.5秒で一周
-      const delay = i * 0.3; // ずらして登場
+      const angle = (i / 10) * 360; // 円形配置
+      const duration = 8 + Math.random() * 2; // 8～10秒で中央を周回
+      const delay = i * 0.2; // ずらして登場
 
       fairy.innerHTML = `
         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -237,19 +254,27 @@
         </svg>
       `;
 
-      fairy.style.animation = `flyAround${i} ${duration}s linear infinite`;
+      fairy.style.animation = `orbit${i} ${duration}s linear infinite`;
       fairy.style.animationDelay = `${delay}s`;
 
       container.appendChild(fairy);
 
-      // Create unique keyframes for each fairy
+      // Create orbit keyframes for each fairy (circular motion around center)
       const keyframes = `
-        @keyframes flyAround${i} {
-          0% { left: ${20 + i * 10}%; top: ${10 + i * 15}%; opacity: 0.3; }
-          25% { left: ${70 - i * 5}%; top: ${5 + i * 10}%; opacity: 0.6; }
-          50% { left: ${80 - i * 15}%; top: ${60 + i * 5}%; opacity: 0.4; }
-          75% { left: ${30 + i * 5}%; top: ${70 - i * 10}%; opacity: 0.6; }
-          100% { left: ${20 + i * 10}%; top: ${10 + i * 15}%; opacity: 0.3; }
+        @keyframes orbit${i} {
+          0% {
+            left: calc(50% + 150px * cos(${angle}deg));
+            top: calc(50% + 150px * sin(${angle}deg));
+            opacity: 0.4;
+          }
+          50% {
+            opacity: 0.7;
+          }
+          100% {
+            left: calc(50% + 150px * cos(${angle + 360}deg));
+            top: calc(50% + 150px * sin(${angle + 360}deg));
+            opacity: 0.4;
+          }
         }
       `;
 

@@ -182,6 +182,9 @@ class MascotController {
     // Stop movement during message
     this.stopMovement();
 
+    // Set expression and animation based on trigger
+    this._applyExpressionAndAnimation(triggerId);
+
     // Move to bottom-right before showing message (for readability)
     const pos = this.positions['bottom-right'];
     Object.keys(pos).forEach(key => {
@@ -224,6 +227,128 @@ class MascotController {
   _hide() {
     this.mascotEl.classList.remove('mascot--visible');
     this.bubbleEl.style.display = 'none';
+    // Reset to normal expression when hiding
+    this.setExpression('normal');
+  }
+
+  _applyExpressionAndAnimation(triggerId) {
+    switch(triggerId) {
+      case 'first_mark':
+      case 'reach_first':
+      case 'reach_double':
+        this.setExpression('happy');
+        this.setAnimation('jump');
+        break;
+      case 'bingo':
+        this.setExpression('bingo');
+        this.setAnimation('jump');
+        break;
+      case 'random_encouragement':
+        this.setExpression('wink');
+        this.setAnimation('flutter');
+        break;
+      default:
+        this.setExpression('normal');
+    }
+  }
+
+  setExpression(type) {
+    const svg = this.mascotEl.querySelector('svg');
+    if (!svg) return;
+
+    const leftEye = svg.getElementById('mascot-left-eye');
+    const rightEye = svg.getElementById('mascot-right-eye');
+    const mouth = svg.getElementById('mascot-mouth');
+    const gradientStops = svg.querySelectorAll('#fairy-grad stop');
+
+    switch(type) {
+      case 'normal':
+        // 目：r=3、口：笑顔、グラデーション：青系
+        if (leftEye) leftEye.setAttribute('r', '3');
+        if (rightEye) rightEye.setAttribute('r', '3');
+        if (mouth) mouth.setAttribute('d', 'M 44 38 Q 50 41 56 38');
+        if (gradientStops.length >= 2) {
+          gradientStops[0].setAttribute('style', 'stop-color:#60a5fa;stop-opacity:1');
+          gradientStops[1].setAttribute('style', 'stop-color:#3b82f6;stop-opacity:1');
+        }
+        break;
+
+      case 'happy':
+        // 目：r=5、口：大きな笑顔
+        if (leftEye) leftEye.setAttribute('r', '5');
+        if (rightEye) rightEye.setAttribute('r', '5');
+        if (mouth) mouth.setAttribute('d', 'M 42 38 Q 50 43 58 38');
+        if (gradientStops.length >= 2) {
+          gradientStops[0].setAttribute('style', 'stop-color:#60a5fa;stop-opacity:1');
+          gradientStops[1].setAttribute('style', 'stop-color:#3b82f6;stop-opacity:1');
+        }
+        break;
+
+      case 'surprised':
+        // 目：r=6、口：O字
+        if (leftEye) leftEye.setAttribute('r', '6');
+        if (rightEye) rightEye.setAttribute('r', '6');
+        // 口をパスから円に変更
+        if (mouth) {
+          mouth.setAttribute('d', '');
+          mouth.setAttribute('cx', '50');
+          mouth.setAttribute('cy', '40');
+          mouth.setAttribute('r', '3');
+          mouth.setAttribute('stroke', 'none');
+          mouth.setAttribute('fill', '#0f172a');
+        }
+        if (gradientStops.length >= 2) {
+          gradientStops[0].setAttribute('style', 'stop-color:#60a5fa;stop-opacity:1');
+          gradientStops[1].setAttribute('style', 'stop-color:#3b82f6;stop-opacity:1');
+        }
+        break;
+
+      case 'wink':
+        // 左目：r=0.5（閉じ目）、右目：r=3
+        if (leftEye) leftEye.setAttribute('r', '0.5');
+        if (rightEye) rightEye.setAttribute('r', '3');
+        if (mouth) mouth.setAttribute('d', 'M 44 39 Q 50 42 56 39');
+        if (gradientStops.length >= 2) {
+          gradientStops[0].setAttribute('style', 'stop-color:#60a5fa;stop-opacity:1');
+          gradientStops[1].setAttribute('style', 'stop-color:#3b82f6;stop-opacity:1');
+        }
+        break;
+
+      case 'bingo':
+        // 目：r=5、口：大きな笑顔、グラデーション：金色
+        if (leftEye) leftEye.setAttribute('r', '5');
+        if (rightEye) rightEye.setAttribute('r', '5');
+        if (mouth) mouth.setAttribute('d', 'M 42 38 Q 50 43 58 38');
+        if (gradientStops.length >= 2) {
+          gradientStops[0].setAttribute('style', 'stop-color:#fbbf24;stop-opacity:1');
+          gradientStops[1].setAttribute('style', 'stop-color:#f59e0b;stop-opacity:1');
+        }
+        break;
+    }
+  }
+
+  setAnimation(type) {
+    const svg = this.mascotEl.querySelector('svg');
+    if (!svg) return;
+
+    switch(type) {
+      case 'jump':
+        svg.style.animation = 'jump 0.8s ease-in-out';
+        break;
+      case 'spin':
+        svg.style.animation = 'spin 1.2s linear';
+        break;
+      case 'flutter':
+        // flutter はSVG全体ではなく羽に適用するため、mascotEl自体にアニメーション
+        const wings = svg.querySelectorAll('ellipse');
+        if (wings.length >= 2) {
+          wings[0].style.animation = 'flutter 0.6s ease-in-out infinite';
+          wings[1].style.animation = 'flutter 0.6s ease-in-out infinite';
+        }
+        break;
+      default:
+        svg.style.animation = 'fairyBounce 0.6s ease-in-out infinite';
+    }
   }
 
   initIdleTimer() {

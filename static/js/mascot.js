@@ -200,6 +200,9 @@ class MascotController {
 
     // Wait for position transition to complete (0.6s) before showing
     setTimeout(() => {
+      // Adjust bubble position based on mascot position
+      this._adjustBubblePosition();
+
       // Show bubble and mascot
       this.bubbleEl.style.display = 'block';
       this.mascotEl.classList.add('mascot--visible');
@@ -263,9 +266,7 @@ class MascotController {
 
     switch(type) {
       case 'normal':
-        // 目：r=3、口：笑顔、グラデーション：青系
-        if (leftEye) leftEye.setAttribute('r', '3');
-        if (rightEye) rightEye.setAttribute('r', '3');
+        // 口：笑顔、グラデーション：青系
         if (mouth) mouth.setAttribute('d', 'M 44 38 Q 50 41 56 38');
         if (gradientStops.length >= 2) {
           gradientStops[0].setAttribute('style', 'stop-color:#60a5fa;stop-opacity:1');
@@ -274,9 +275,7 @@ class MascotController {
         break;
 
       case 'happy':
-        // 目：r=5、口：大きな笑顔
-        if (leftEye) leftEye.setAttribute('r', '5');
-        if (rightEye) rightEye.setAttribute('r', '5');
+        // 口：大きな笑顔
         if (mouth) mouth.setAttribute('d', 'M 42 38 Q 50 43 58 38');
         if (gradientStops.length >= 2) {
           gradientStops[0].setAttribute('style', 'stop-color:#60a5fa;stop-opacity:1');
@@ -285,10 +284,7 @@ class MascotController {
         break;
 
       case 'surprised':
-        // 目：r=6、口：O字
-        if (leftEye) leftEye.setAttribute('r', '6');
-        if (rightEye) rightEye.setAttribute('r', '6');
-        // 口をパスから円に変更
+        // 口：O字
         if (mouth) {
           mouth.setAttribute('d', '');
           mouth.setAttribute('cx', '50');
@@ -304,9 +300,7 @@ class MascotController {
         break;
 
       case 'wink':
-        // 左目：r=0.5（閉じ目）、右目：r=3
-        if (leftEye) leftEye.setAttribute('r', '0.5');
-        if (rightEye) rightEye.setAttribute('r', '3');
+        // 口：軽い笑顔
         if (mouth) mouth.setAttribute('d', 'M 44 39 Q 50 42 56 39');
         if (gradientStops.length >= 2) {
           gradientStops[0].setAttribute('style', 'stop-color:#60a5fa;stop-opacity:1');
@@ -315,9 +309,7 @@ class MascotController {
         break;
 
       case 'bingo':
-        // 目：r=5、口：大きな笑顔、グラデーション：金色
-        if (leftEye) leftEye.setAttribute('r', '5');
-        if (rightEye) rightEye.setAttribute('r', '5');
+        // 口：大きな笑顔、グラデーション：金色
         if (mouth) mouth.setAttribute('d', 'M 42 38 Q 50 43 58 38');
         if (gradientStops.length >= 2) {
           gradientStops[0].setAttribute('style', 'stop-color:#fbbf24;stop-opacity:1');
@@ -348,6 +340,26 @@ class MascotController {
         break;
       default:
         svg.style.animation = 'fairyBounce 0.6s ease-in-out infinite';
+    }
+  }
+
+  _adjustBubblePosition() {
+    // メッセージ表示時は常に右下に妖精がいるため、バブルは右側に表示
+    // ただしレスポンシブで左側に表示する必要があるかもしれないので調整可能に
+    const isMobile = window.innerWidth < 600;
+
+    if (isMobile) {
+      // モバイルでは上に配置
+      this.bubbleEl.style.top = '-80px';
+      this.bubbleEl.style.bottom = 'auto';
+      this.bubbleEl.style.right = '-20px';
+      this.bubbleEl.style.left = 'auto';
+    } else {
+      // デスクトップでは右上に配置
+      this.bubbleEl.style.bottom = '100px';
+      this.bubbleEl.style.top = 'auto';
+      this.bubbleEl.style.right = '-20px';
+      this.bubbleEl.style.left = 'auto';
     }
   }
 

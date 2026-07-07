@@ -132,9 +132,16 @@
 
 <script>
   document.getElementById('start-button').addEventListener('click', function() {
-    // Always generate fresh seed (new card each time)
-    const seed = crypto.randomUUID();
-    localStorage.setItem('my_seed', seed);
+    // Check if user already has a saved seed (from cache clear recovery)
+    let seed = localStorage.getItem('bingo_permanent_seed');
+
+    if (!seed) {
+      // First time or new device: generate new seed
+      seed = crypto.randomUUID();
+    }
+
+    // Save seed for next visit (in case of cache clear)
+    localStorage.setItem('bingo_permanent_seed', seed);
     window.location.href = `/card?seed=${seed}`;
   });
 </script>

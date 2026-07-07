@@ -200,9 +200,6 @@ class MascotController {
 
     // Wait for position transition to complete (0.6s) before showing
     setTimeout(() => {
-      // Adjust bubble position based on mascot position
-      this._adjustBubblePosition();
-
       // Show bubble and mascot
       this.bubbleEl.style.display = 'block';
       this.mascotEl.classList.add('mascot--visible');
@@ -235,6 +232,14 @@ class MascotController {
   }
 
   _applyExpressionAndAnimation(triggerId) {
+    // メッセージ表示時は妖精を右下に固定
+    this.stopMovement();
+    const pos = this.positions['bottom-right'];
+    Object.keys(pos).forEach(key => {
+      this.mascotEl.style[key] = pos[key];
+    });
+    this.currentPosition = 'bottom-right';
+
     switch(triggerId) {
       case 'first_mark':
       case 'reach_first':

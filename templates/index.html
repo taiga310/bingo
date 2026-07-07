@@ -221,8 +221,8 @@
       </div>
     </div>
 
-    <h1 style="margin-top: 32px; margin-bottom: 8px;">🎯 E&R ビンゴ</h1>
-    <p style="font-size: 0.95rem; color: #a0aec0; margin-bottom: 24px;">森本配下の幹事団パシリ妖精たち</p>
+    <p style="font-size: 0.95rem; color: #a0aec0; margin-bottom: 8px;">森本配下の幹事団パシリ妖精たち</p>
+    <h1 style="margin-top: 0; margin-bottom: 24px;">🎯 E&R ビンゴ</h1>
 
     <button id="start-button">📱 カードを受け取る</button>
   </div>
@@ -356,30 +356,19 @@
 
   // 森本のコメント表示＆パシリ逃げ
   function showMorimotoCommentAndMakeFairiesRunAway() {
-    // 森本のコメント表示（妖精の位置に追従）
+    // 森本のコメント表示（右側に表示）
     const comment = morimotoComments[Math.floor(Math.random() * morimotoComments.length)];
 
-    // 中央の妖精（リーダー）の位置を取得
-    const landingMascot = document.getElementById('landing-mascot');
-    let posX = window.innerWidth / 2;
-    let posY = window.innerHeight / 2;
-
-    if (landingMascot) {
-      const rect = landingMascot.getBoundingClientRect();
-      // 妖精の上に表示
-      posX = rect.left + rect.width / 2;
-      posY = rect.top - 60; // 妖精の上60pxに表示
-
-      // 画面外に出ないように調整
-      if (posY < 50) posY = rect.bottom + 30;
-    }
+    // 右側にランダムな位置に表示
+    const posX = window.innerWidth - 100; // 右から100px
+    const posY = 50 + Math.random() * (window.innerHeight - 200); // 上下ランダム
 
     const commentEl = document.createElement('div');
     commentEl.style.cssText = `
       position: fixed;
       top: ${posY}px;
       left: ${posX}px;
-      transform: translate(-50%, -50%);
+      transform: translate(-100%, 0);
       background: linear-gradient(135deg, #fbbf24, #f59e0b);
       color: #0f172a;
       padding: 12px 20px;

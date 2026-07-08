@@ -287,7 +287,7 @@ class BingoCard {
 
       // Check if any drawn name is on this card
       for (const cellData of this.cells) {
-        if (drawn.includes(cellData.name) && !cellData.is_center) {
+        if (drawn.includes(cellData.name)) {
           const cells = document.querySelectorAll('.bingo-cell');
           const cell = cells[cellData.index];
 

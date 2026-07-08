@@ -57,11 +57,12 @@ def generate_card_cells(seed: str, names: list, center: str) -> list:
     """
     Generate bingo card cells from seed.
     Same seed always produces same layout.
+    Center cell is now random like other cells.
 
     Args:
         seed: UUID string
         names: list of ~30 names (must not include center)
-        center: center cell name
+        center: center cell name (unused now, kept for compatibility)
 
     Returns:
         list of 9 cell dicts
@@ -70,22 +71,16 @@ def generate_card_cells(seed: str, names: list, center: str) -> list:
     seed_int = int(hashlib.sha256(seed.encode()).hexdigest(), 16) % (2**32)
     rng = random.Random(seed_int)
 
-    # Remove center from pool to avoid duplicates
-    pool = [n for n in names if n != center]
+    # Select 9 random names (including center position)
+    selected = rng.sample(names, min(9, len(names)))
 
-    # Select 8 random names
-    selected = rng.sample(pool, min(8, len(pool)))
-
-    # Build 9-element array with center at index 4
-    if len(selected) < 8:
-        # Fallback: pad with names
-        selected = (selected * 2)[:8]
-
-    flat = selected[:4] + [center] + selected[4:8]
+    # Fallback: pad with names if not enough
+    if len(selected) < 9:
+        selected = (selected * 2)[:9]
 
     # Build cell objects
     cells = []
-    for i, name in enumerate(flat):
+    for i, name in enumerate(selected):
         row, col = divmod(i, 3)
         cells.append({
             "index": i,

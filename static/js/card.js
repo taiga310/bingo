@@ -31,9 +31,8 @@ class BingoCard {
       this.marked = saved.marked;
       console.log('🔄 Loaded from localStorage:', this.marked);
     } else {
-      // First time: only center is marked
+      // First time: all cells unmarked (center is now random)
       this.marked = new Array(9).fill(false);
-      this.marked[4] = true;
       console.log('✨ New card, initialized marked:', this.marked);
     }
 

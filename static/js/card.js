@@ -89,18 +89,10 @@ class BingoCard {
 
   onCellTap(cellEl) {
     const idx = parseInt(cellEl.getAttribute('data-index'));
-    const isCenter = cellEl.getAttribute('data-center') === 'true';
 
-    // Center cell: show message, don't toggle
-    if (isCenter) {
-      const centerMessage = window.CONFIG?.centerMessage || 'もう一度タップしてね！';
-      window.mascot.show('center_tap', centerMessage);
-      return;
-    }
-
-    // Regular cell: toggle
+    // Toggle cell (including center)
     const seen = this.loadMascotSeen();
-    const isFirstMark = !this.marked.some((m, i) => m && i !== 4);
+    const isFirstMark = !this.marked.some((m, i) => m);
 
     this.marked[idx] = !this.marked[idx];
     this.saveState();

@@ -25,12 +25,12 @@ class MascotController {
     };
 
     this.MESSAGES = {
-      page_load: 'やあ！森本だよ！\n一緒にビンゴを楽しもうね！🎉',
+      page_load: '一緒にビンゴを楽しもうね！🎉',
       center_tap: config?.center_message || 'ここから始めようね！',
       first_mark: 'よーし！いいスタートだ！\nその調子で頑張ろう！💪',
       reach_first: 'おお！リーチだ！\nあと1つだよ！あと1つ！！🚀',
       reach_double: 'わわわ！ダブルリーチ！\nすごいすごい！チャンスだ！⭐',
-      bingo: '前の幹事団に大きく主張してね！！\nおめでとう！🎉\n森本の出世をお待ちしております',
+      bingo: 'おめでとう！！！豪華景品です！\n幹事団にアピールしてね！🎉',
       name_on_card: '[name]さんが呼ばれたよ！\nチャンス！チャンス！',
       idle_3min: 'おーい！寝ちゃダメだ！\n頑張れ！応援してるぞ！📢',
       encouragement_5: 'いいね！あと少しだよ！\nもうすぐリーチになっちゃうぞ！👀'

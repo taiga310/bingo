@@ -350,13 +350,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     titleEl.textContent = `${playerName}さんのBingoカード`;
   }
 
-  // Special card for Morimoto - all cells become "4"
-  if (playerName === '森本') {
-    document.querySelectorAll('.bingo-cell').forEach(cell => {
-      cell.textContent = '4';
-    });
-  }
-
   // Fetch cell data
   const response = await fetch('/api/names');
   const namesData = await response.json();

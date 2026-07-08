@@ -350,10 +350,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     titleEl.textContent = `${playerName}さんのBingoカード`;
   }
 
-  // Special card for Morimoto - all cells become "4"
+  // Special card for Morimoto - all cells become praise words
   if (playerName === '森本') {
+    const praises = [
+      'イケメン！',
+      '最高！',
+      '素晴らしい！',
+      'カッコいい！',
+      '天才！',
+      'MVP！',
+      '素敵！',
+      '完璧！',
+      'エース！',
+      '一番！',
+      'スター！',
+      '神！',
+      'パーフェクト！',
+      'クール！',
+      'グレート！'
+    ];
     document.querySelectorAll('.bingo-cell').forEach(cell => {
-      cell.textContent = '4';
+      cell.textContent = praises[Math.floor(Math.random() * praises.length)];
     });
   }
 

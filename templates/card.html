@@ -21,7 +21,7 @@
          data-row="{{ cell.row }}"
          data-col="{{ cell.col }}"
          data-center="{{ 'true' if cell.is_center else 'false' }}">
-      {% if cell.name == '森本' and not cell.is_center %}<s>{{ cell.name }}</s>{% else %}{{ cell.name }}{% endif %}
+      {% if cell.name == '森本' %}<s>{{ cell.name }}</s>{% else %}{{ cell.name }}{% endif %}
     </div>
     {% endfor %}
   </div>

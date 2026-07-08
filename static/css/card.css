@@ -83,34 +83,12 @@
   transform: scale(1.02);
 }
 
-/* Center cell (starting open - FREE cell) */
+/* Center cell - now shows random name like other cells */
 .bingo-cell[data-center="true"] {
-  background: linear-gradient(135deg, rgba(96, 165, 250, 0.25), rgba(96, 165, 250, 0.15));
-  border: 3px solid var(--accent-blue);
-  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.3), inset 0 0 16px rgba(96, 165, 250, 0.25);
-  font-size: 0;
-  font-weight: 700;
-  color: transparent;
-  cursor: default;
-  animation: centerPulse 1.5s ease-in-out infinite;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-
-.bingo-cell[data-center="true"]::before {
-  content: '✓ FREE';
-  position: absolute;
-  font-size: 1.2rem;
-  color: var(--accent-blue);
-  font-weight: 900;
-  letter-spacing: 1px;
-  text-shadow: 0 2px 8px rgba(96, 165, 250, 0.3);
-  z-index: 10;
-  text-align: center;
-  line-height: 1.2;
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  border: 2px solid var(--accent-blue);
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(96, 165, 250, 0.2);
 }
 
 @keyframes centerPulse {

@@ -350,6 +350,15 @@ class BingoCard {
 document.addEventListener('DOMContentLoaded', async () => {
   const seed = window.CARD_SEED;
 
+  // Get player name from localStorage
+  const playerName = localStorage.getItem('bingo_player_name') || 'プレイヤー';
+
+  // Display player name in title
+  const titleEl = document.getElementById('player-name-title');
+  if (titleEl) {
+    titleEl.textContent = `${playerName}さんのBingoカード`;
+  }
+
   // Fetch cell data
   const response = await fetch('/api/names');
   const namesData = await response.json();

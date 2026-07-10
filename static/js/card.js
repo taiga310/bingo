@@ -354,23 +354,23 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (['岩松', 'いわまつ', 'イワマツ'].includes(playerName)) {
     const cells = document.querySelectorAll('.bingo-cell');
 
-    // Layout: diagonal to guarantee bingo only on 8th turn (Morimoto)
-    // Diagonal [0, 4, 8]: 松尾, 保田, 森本
-    // Other cells: 標, 坂本, 藤田, 黒須, 寺山, ランダム
+    // Layout: 1st column [1, 4, 7] = 標, 保田, 森本 for bingo on 8th turn
+    // Other cells use random names not in the drawn list
     const allNames = JSON.parse(document.querySelector('script[data-names]')?.dataset.names || '[]');
     const otherNames = allNames.filter(n => !['松尾', '標', '坂本', '保田', '藤田', '黒須', '寺山', '森本'].includes(n));
-    const randomName = otherNames[Math.floor(Math.random() * otherNames.length)] || 'その他';
+
+    const getRandomName = () => otherNames[Math.floor(Math.random() * otherNames.length)] || 'その他';
 
     const cardLayout = {
       0: '松尾',
       1: '標',
-      2: randomName,
+      2: getRandomName(),
       3: '坂本',
       4: '保田',
       5: '藤田',
       6: '黒須',
-      7: '寺山',
-      8: '森本'
+      7: '森本',
+      8: '寺山'
     };
 
     cells.forEach((cell, idx) => {

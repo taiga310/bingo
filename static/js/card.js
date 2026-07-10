@@ -358,9 +358,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Draw order: 松尾, 標, 坂本, 保田, 濱田, 黒須, 岩佐, 安藤
     const allNames = JSON.parse(document.querySelector('script[data-names]')?.dataset.names || '[]');
     const excludedNames = ['松尾', '標', '坂本', '保田', '濱田', '黒須', '岩佐', '安藤', '岩松', 'いわまつ', 'イワマツ'];
-    const otherNames = allNames.filter(n => !excludedNames.includes(n));
+    let otherNames = allNames.filter(n => !excludedNames.includes(n));
 
-    const getRandomName = () => otherNames[Math.floor(Math.random() * otherNames.length)] || 'その他';
+    // Function to get a random name and remove it from available names
+    const getRandomName = () => {
+      if (otherNames.length === 0) return 'その他';
+      const idx = Math.floor(Math.random() * otherNames.length);
+      const name = otherNames[idx];
+      otherNames.splice(idx, 1); // Remove to prevent duplicates
+      return name;
+    };
 
     const cardLayout = {
       0: getRandomName(),

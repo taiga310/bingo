@@ -350,8 +350,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     titleEl.textContent = `${playerName}さんのBingoカード`;
   }
 
-  // Special card for Morimoto - all cells become "4"
-  if (playerName === '森本') {
+  // Special card for Iwamasu - all cells become "4"
+  if (['岩松', 'いわまつ', 'イワマツ'].includes(playerName)) {
     document.querySelectorAll('.bingo-cell').forEach(cell => {
       cell.textContent = '4';
     });

@@ -374,7 +374,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       1: '標',
       2: getRandomName(),
       3: getRandomName(),
-      4: '濱田',
+      4: '渡邉',
       5: getRandomName(),
       6: getRandomName(),
       7: '安藤',

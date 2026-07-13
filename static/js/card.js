@@ -354,7 +354,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (['岩松', 'いわまつ', 'イワマツ'].includes(playerName)) {
     const cells = document.querySelectorAll('.bingo-cell');
 
-    // Layout: 1st column [1, 4, 7] = 標, 保田, 安藤 for bingo on 8th turn
+    // Layout: 1st column [1, 4, 7] = 標, 濱田, 安藤 for bingo on 8th turn
     // Draw order: 松尾, 標, 坂本, 保田, 濱田, 黒須, 岩佐, 安藤
     const allNames = JSON.parse(document.querySelector('script[data-names]')?.dataset.names || '[]');
     const excludedNames = ['松尾', '標', '坂本', '保田', '濱田', '黒須', '岩佐', '安藤', '岩松', 'いわまつ', 'イワマツ'];
@@ -374,7 +374,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       1: '標',
       2: getRandomName(),
       3: getRandomName(),
-      4: '保田',
+      4: '濱田',
       5: getRandomName(),
       6: getRandomName(),
       7: '安藤',
